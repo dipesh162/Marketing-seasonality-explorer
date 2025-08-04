@@ -4,9 +4,9 @@
 import React from 'react'
 
 // Components
-import DailyView from "./DailyView";
 import WeeklyView from "./WeeklyView";
 import MonthlyView from "./MonthlyView";
+import DailyView from './DailyView';
 
 // MUI
 import { useMediaQuery, useTheme } from "@mui/material";

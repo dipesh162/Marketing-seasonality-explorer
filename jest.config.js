@@ -1,9 +1,20 @@
-/** @type {import('jest').Config} */
+// jest.config.js
 module.exports = {
-  testEnvironment: 'jsdom',
+  testEnvironment: "jsdom",
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+    "^.+\\.(js|jsx|ts|tsx)$": ["@swc/jest", {
+      jsc: {
+        parser: {
+          syntax: "ecmascript", // or "typescript" if using TS
+          jsx: true,             // ✅ enable JSX parsing
+        },
+        transform: {
+          react: {
+            runtime: "automatic" // ✅ for React 17+ / Next.js
+          }
+        }
+      }
+    }],
   },
-  moduleFileExtensions: ['js', 'jsx'],
-  testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+  moduleFileExtensions: ["js", "jsx", "json", "node"],
 };
