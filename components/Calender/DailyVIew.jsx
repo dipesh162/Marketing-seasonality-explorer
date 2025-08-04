@@ -3,6 +3,7 @@ import {
   format,
   isSameDay,
 } from "date-fns";
+import React from 'react';
 
 // MUI
 import { Box, Tooltip, Typography } from "@mui/material";

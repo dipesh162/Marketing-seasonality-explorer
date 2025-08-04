@@ -1,5 +1,6 @@
 // React
 import { Bar, BarChart, ResponsiveContainer, XAxis } from "recharts";
+import React from 'react';
 
 // MUI
 import { Box, Tooltip, Typography, useTheme } from "@mui/material";

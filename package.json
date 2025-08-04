@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -24,8 +25,14 @@
     "recharts": "^3.1.0"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-react": "^7.27.1",
     "@eslint/eslintrc": "^3",
+    "@testing-library/react": "^16.3.0",
+    "babel-jest": "^30.0.5",
     "eslint": "^9",
-    "eslint-config-next": "15.4.4"
+    "eslint-config-next": "15.4.4",
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5"
   }
 }

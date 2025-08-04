@@ -1,7 +1,10 @@
 "use client";
 
+// React
+import React from 'react'
+
 // Components
-import DailyView from "./DailyVIew";
+import DailyView from "./DailyView";
 import WeeklyView from "./WeeklyView";
 import MonthlyView from "./MonthlyView";
 
@@ -14,7 +17,7 @@ import { useThemeContext } from "../ThemeContext";
 // Constants
 import { DEFAULT_ALERTS } from "../../lib/alertConfig";
 
-function getCellStyles({ metric, info, maxVolume }, muiTheme) {
+export function getCellStyles({ metric, info, maxVolume }, muiTheme) {
   const theme = muiTheme;
   const styles = {
     backgroundColor: theme.palette.background.paper,
@@ -73,7 +76,7 @@ function getCellStyles({ metric, info, maxVolume }, muiTheme) {
   return styles;
 }
 
-function getCellAlertStyle({ info, alertSettings = DEFAULT_ALERTS }) {
+export function getCellAlertStyle({ info, alertSettings = DEFAULT_ALERTS }) {
   let borderColor = "transparent";
   if (!info) return { border: `2px solid ${borderColor}` };
 

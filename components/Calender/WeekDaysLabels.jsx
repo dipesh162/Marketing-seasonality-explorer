@@ -1,5 +1,8 @@
 "use client";
 
+// React
+import React from 'react';
+
 // MUI
 import { Box, Typography } from '@mui/material';
 

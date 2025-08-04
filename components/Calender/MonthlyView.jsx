@@ -1,4 +1,5 @@
 // React
+import React from 'react';
 import {
   startOfWeek,
   endOfWeek,
