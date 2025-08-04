@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 
 // Components
 import FiltersPanel from '../components/Filters/FiltersPanel';
-import CalendarView from '../components/Calender/CalendarView';
+import CalendarView from '../components/Calendar/CalendarView';
 
 export default function Home() {
   const [symbol, setSymbol] = useState('BTC/USDT');
