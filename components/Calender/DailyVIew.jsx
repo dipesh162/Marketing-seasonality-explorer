@@ -12,7 +12,7 @@ import { useTheme } from "@mui/material/styles";
 // Constants
 import { DEFAULT_ALERTS } from "../../lib/alertConfig";
 
-export default function DailyView({
+export default function DailyView({ 
   currentDate,
   data,
   metric,
