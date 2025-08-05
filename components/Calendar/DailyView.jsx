@@ -33,15 +33,9 @@ export default function DailyView({
   const styles = getCellStyles({ metric, info, maxVolume: info?.volume }, muiTheme);
   const isPatternDate = patternDates?.has(key);
 
-  // if (rangeStart && rangeEnd) {
-  //   const startSel = rangeStart < rangeEnd ? rangeStart : rangeEnd;
-  //   const endSel = rangeStart < rangeEnd ? rangeEnd : rangeStart;
-  //   isInRange = currentDate >= startSel && currentDate <= endSel;
-  // }
-
   return (
     <>
-      <Typography variant="caption" fontWeight="bold" mb={1} textAlign="center">
+      <Typography variant="caption" component='div' fontSize={18} fontWeight="bold" mb={1} textAlign="center">
         {format(currentDate, "EEE")}
       </Typography>
       <Box display="flex" justifyContent="center">

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import CalendarGrid from '../components/Calender/CalendarGrid';
+import CalendarGrid from '../components/Calendar/CalendarGrid';
 import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles';
 import { ThemeProvider as CustomThemeProvider } from '../components/ThemeContext';
 

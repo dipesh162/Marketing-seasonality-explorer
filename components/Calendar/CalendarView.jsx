@@ -171,8 +171,6 @@ export default function CalendarView({ symbol, timeframe, metric }) {
     };
     adjustFocus();
   }, [currentDate, timeframe]);
-  
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!focusedDate) return;

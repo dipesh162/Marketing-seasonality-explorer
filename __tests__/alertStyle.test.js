@@ -1,4 +1,4 @@
-import { getCellAlertStyle } from '../components/Calender/CalendarGrid';
+import { getCellAlertStyle } from '../components/Calendar/CalendarGrid';
 
 const mockAlertSettings = {
   volatility: 2,   // threshold

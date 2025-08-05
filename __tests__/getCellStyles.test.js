@@ -1,4 +1,4 @@
-import { getCellStyles } from '../components/Calender/CalendarGrid';
+import { getCellStyles } from '../components/Calendar/CalendarGrid';
 import { createTheme } from '@mui/material/styles';
 
 const theme = createTheme();
