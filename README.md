@@ -3,22 +3,17 @@
 A React/Next.js application that visualizes market seasonality through a dynamic calendar UI with daily, weekly, and monthly views. It includes interactive heatmaps for volatility, liquidity indicators, and performance metrics, designed to help traders and analysts explore historical patterns.
 
 ## 🖥️ Live Demo (Video)
-📹 **[Video Link Placeholder]**  
-Replace this with the video recording link showcasing:
-- Calendar interaction
-- View switching (Daily, Weekly, Monthly)
-- Tooltips, historical alerts, and visual legends
-- Keyboard navigation and alert system
 
----
+https://www.loom.com/share/1bf509c673854c7eb57834a19486ca3f?sid=dd0d0bdc-8afe-49d5-bc25-2e330eeb7ccc
 
 ## 🚀 Getting Started
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/market-seasonality-explorer.git
-cd market-seasonality-explorer
+git clone https://github.com/dipesh162/Marketing-seasonality-explorer
+
+
 2. Install dependencies
 bash
 Copy
@@ -94,9 +89,9 @@ Missing or null data
 
 ⚠️ Edge case: empty data object
 
-🔗 GitHub Repository
-🔗 [GitHub Repo Placeholder]
+🔗 https://github.com/dipesh162/Marketing-seasonality-explorer
+
 Replace with your actual GitHub repo link.
 
 🙌 Author
-Created by [Your Name] as part of a technical assignment for [Company Name].
+Created by Dipesh as part of a technical assignment for GoQuant.
