@@ -33,11 +33,11 @@ export default function DailyView({
   const styles = getCellStyles({ metric, info, maxVolume: info?.volume }, muiTheme);
   const isPatternDate = patternDates?.has(key);
 
-  if (rangeStart && rangeEnd) {
-    const startSel = rangeStart < rangeEnd ? rangeStart : rangeEnd;
-    const endSel = rangeStart < rangeEnd ? rangeEnd : rangeStart;
-    isInRange = currentDate >= startSel && currentDate <= endSel;
-  }
+  // if (rangeStart && rangeEnd) {
+  //   const startSel = rangeStart < rangeEnd ? rangeStart : rangeEnd;
+  //   const endSel = rangeStart < rangeEnd ? rangeEnd : rangeStart;
+  //   isInRange = currentDate >= startSel && currentDate <= endSel;
+  // }
 
   return (
     <>
@@ -80,17 +80,20 @@ export default function DailyView({
             borderColor: isPatternDate ? '#f39c12' : undefined,
             ...styles,
             ...getAlertStyle?.({ info, alertSettings: DEFAULT_ALERTS }),
+            width: 150,
+            height: 118,
             transition: 'all 0.2s ease-in-out',
           }}
         >
           <Typography
             variant="caption"
             sx={{
-              position: 'absolute',
-              top: 4,
-              right: 6,
-              fontSize: '0.7rem',
-              color: muiTheme.palette.text.secondary,
+                  position: 'absolute',
+                  top: 6,
+                  left: 10,
+                  fontSize: '18px',
+                  fontWeight: 'bold',
+                  color: 'white',
             }}
           >
             {format(currentDate, 'd')}

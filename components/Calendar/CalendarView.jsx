@@ -19,7 +19,6 @@ import { groupKlines } from '../../lib/groupKlines';
 import { getHistoricalPatternDates } from '../../lib/historicalPatterns';
 import { DEFAULT_ALERTS } from '../../lib/alertConfig';
 
-
 export default function CalendarView({ symbol, timeframe, metric }) {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [marketData, setMarketData] = useState(null);
@@ -31,7 +30,8 @@ export default function CalendarView({ symbol, timeframe, metric }) {
   const [rangeEnd, setRangeEnd] = useState(null);
   const [comparisonData, setComparisonData] = useState(null);
   const [patternDates, setPatternDates] = useState(new Set());
-  const [alertData, setAlertData] = useState(null); // { type: 'volatility' | 'performance' | 'both', message: string }
+  const [alertData, setAlertData] = useState(null);
+  const [isComparing, setIsComparing] = useState(false);
 
   const loadMarketData = useCallback(async () => {
     if (!symbol || !timeframe) return;
@@ -39,13 +39,11 @@ export default function CalendarView({ symbol, timeframe, metric }) {
     try {
       let start, end;
       if (timeframe === 'daily') {
-        // fetch a single day
         start = new Date(currentDate);
-        start.setHours(0,0,0,0);
+        start.setHours(0, 0, 0, 0);
         end = new Date(start);
         end.setDate(end.getDate() + 1);
       } else {
-        // fetch full calendar grid boundaries for weekly/monthly
         const monthStart = startOfMonth(currentDate);
         const monthEnd = endOfMonth(currentDate);
         start = startOfWeek(monthStart, { weekStartsOn: 0 });
@@ -72,7 +70,6 @@ export default function CalendarView({ symbol, timeframe, metric }) {
     setLoading(false);
   }, [symbol, timeframe, currentDate]);
 
-
   const handlePrev = useCallback(() => {
     setCurrentDate((prev) => {
       const d = new Date(prev);
@@ -93,29 +90,23 @@ export default function CalendarView({ symbol, timeframe, metric }) {
     });
   }, [timeframe]);
 
-  // Begin a range selection on mouse down
   const handleRangeStart = useCallback((date) => {
     setRangeStart(date);
     setRangeEnd(date);
     setSelectedData(null);
-    console.log('start')
   }, []);
 
-  // Extend the range as the user drags across cells
   const handleRangeExtend = useCallback((date) => {
-    console.log('exten')
     if (rangeStart) {
       setRangeEnd(date);
-      console.log('exten')
     }
   }, [rangeStart]);
 
-  // Finalize the range selection: compute aggregated metrics and open the modal
   const handleRangeEnd = useCallback((date) => {
     if (!rangeStart) return;
     setRangeEnd(date);
     const startDate = rangeStart < date ? rangeStart : date;
-    const endDate   = rangeStart < date ? date      : rangeStart;
+    const endDate = rangeStart < date ? date : rangeStart;
     if (dailyKlines) {
       const items = [];
       const cursor = new Date(startDate);
@@ -127,16 +118,16 @@ export default function CalendarView({ symbol, timeframe, metric }) {
       }
       if (items.length > 0) {
         const n = items.length;
-        const sumVolatility   = items.reduce((acc, d) => acc + d.volatility, 0);
-        const sumPerformance  = items.reduce((acc, d) => acc + d.performance, 0);
-        const totalVolume     = items.reduce((acc, d) => acc + d.volume, 0);
-        const minVolatility   = Math.min(...items.map((d) => d.volatility));
-        const maxVolatility   = Math.max(...items.map((d) => d.volatility));
-        const meanClose       = items.reduce((acc, d) => acc + d.close, 0) / n;
-        const variance        = items.reduce((acc, d) => acc + Math.pow(d.close - meanClose, 2), 0) / n;
-        const stdDev          = Math.sqrt(variance);
+        const sumVolatility = items.reduce((acc, d) => acc + d.volatility, 0);
+        const sumPerformance = items.reduce((acc, d) => acc + d.performance, 0);
+        const totalVolume = items.reduce((acc, d) => acc + d.volume, 0);
+        const minVolatility = Math.min(...items.map((d) => d.volatility));
+        const maxVolatility = Math.max(...items.map((d) => d.volatility));
+        const meanClose = items.reduce((acc, d) => acc + d.close, 0) / n;
+        const variance = items.reduce((acc, d) => acc + Math.pow(d.close - meanClose, 2), 0) / n;
+        const stdDev = Math.sqrt(variance);
         const startKey = format(startDate, 'yyyy-MM-dd');
-        const endKey   = format(endDate,   'yyyy-MM-dd');
+        const endKey = format(endDate, 'yyyy-MM-dd');
         const aggregated = {
           key: `${startKey}–${endKey}`,
           label: `${startKey}–${endKey}`,
@@ -146,27 +137,21 @@ export default function CalendarView({ symbol, timeframe, metric }) {
           minVolatility,
           maxVolatility,
           stdDev,
-          form: startKey,
+          from: startKey,
           to: endKey,
         };
-        setSelectedData(aggregated); // opens modal with aggregated metrics
+        setSelectedData(aggregated);
+        setIsComparing(false);
       }
     }
-    // Compute start/end and aggregate dailyKlines between them…
-    // (build avgVolatility, avgPerformance, totalVolume, minVolatility, maxVolatility, stdDev)
-    // …then call setSelectedData(aggregated);
     setRangeStart(null);
     setRangeEnd(null);
-    console.log('end')
   }, [rangeStart, dailyKlines]);
 
-
-  // Initial and on-change fetch
   useEffect(() => {
     loadMarketData();
   }, [loadMarketData]);
 
-  // Adjust focusedDate when period changes
   useEffect(() => {
     const adjustFocus = () => {
       let start, end;
@@ -186,12 +171,11 @@ export default function CalendarView({ symbol, timeframe, metric }) {
     };
     adjustFocus();
   }, [currentDate, timeframe]);
-
+  
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (!focusedDate) return;
-      // Clone current focus
       let newDate = new Date(focusedDate);
       switch (e.key) {
         case 'ArrowLeft':
@@ -207,27 +191,16 @@ export default function CalendarView({ symbol, timeframe, metric }) {
           newDate.setDate(newDate.getDate() + 7);
           break;
         case 'Enter': {
+          const key = format(newDate, 'yyyy-MM-dd');
           if (timeframe === 'daily') {
-            const key = newDate.toISOString().split('T')[0];
             const info = marketData?.[key];
             if (info) setSelectedData({ ...info, label: key });
           } else if (timeframe === 'weekly') {
-            // compute ISO week key
-            const getWeekKey = (date) => {
-              const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
-              d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-              const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-              const weekNo = Math.ceil(((d - yearStart) / 86400000 + 1) / 7);
-              return `${d.getUTCFullYear()}-W${String(weekNo).padStart(2, '0')}`;
-            };
-            const weekKey = getWeekKey(newDate);
-            const weekObj = Array.isArray(marketData) ? marketData.find((w) => w.key === weekKey) : null;
+            const weekObj = marketData?.find((w) => w.dates?.includes(key));
             if (weekObj) setSelectedData({ ...weekObj });
           } else {
-            // monthly
-            const key = newDate.toISOString().split('T')[0];
             const monthKey = key.slice(0, 7);
-            const match = Array.isArray(marketData) ? marketData.find((d) => d.label === monthKey) : null;
+            const match = marketData?.find((d) => d.label === monthKey);
             if (match) setSelectedData({ ...match, label: key });
           }
           return;
@@ -240,8 +213,6 @@ export default function CalendarView({ symbol, timeframe, metric }) {
         default:
           return;
       }
-
-      // Determine if navigation moved outside current period; if so, paginate
       const isOutside = () => {
         if (timeframe === 'daily') {
           return newDate.toDateString() !== currentDate.toDateString();
@@ -257,7 +228,6 @@ export default function CalendarView({ symbol, timeframe, metric }) {
         }
       };
       if (isOutside()) {
-        // Move forward or backward one period
         if (newDate < currentDate) {
           handlePrev();
         } else {
@@ -280,24 +250,20 @@ export default function CalendarView({ symbol, timeframe, metric }) {
     if (!marketData || timeframe !== 'daily') return;
     const key = format(focusedDate, 'yyyy-MM-dd');
     const info = dailyKlines?.[key];
-
     if (info) {
       const isVolatilityHigh = info.volatility > DEFAULT_ALERTS.volatility;
       const isPerformanceLow = info.performance < DEFAULT_ALERTS.performance;
-
       if (isVolatilityHigh || isPerformanceLow) {
         const type = isVolatilityHigh && isPerformanceLow
           ? 'both'
           : isVolatilityHigh
           ? 'volatility'
           : 'performance';
-
         const message = `${symbol} on ${key} has ${type === 'both'
           ? 'high volatility and poor performance'
           : type === 'volatility'
           ? 'high volatility'
           : 'poor performance'}.`;
-
         setAlertData({ type, message });
       }
     }
@@ -314,58 +280,66 @@ export default function CalendarView({ symbol, timeframe, metric }) {
       {loading || !marketData ? (
         <CircularProgress />
       ) : (
-          <Fade
-            in={!loading && !!marketData}
-            timeout={300}
-            key={`${timeframe}-${currentDate.toISOString()}`}
+        <Fade
+          in={!loading && !!marketData}
+          timeout={300}
+          key={`${timeframe}-${currentDate.toISOString()}`}
+        >
+          <Box
+            mt={4}
+            onMouseUp={() => {
+              if (rangeStart && rangeEnd) {
+                handleRangeEnd(rangeEnd);
+              }
+            }}
           >
-            <Box
-                mt={4}
-                onMouseUp={() => {
-                  if (rangeStart && rangeEnd) {
-                    handleRangeEnd(rangeEnd);
+            <AnimatedCalendarWrapper keyProp={`${timeframe}-${currentDate.toISOString()}`}>
+              <CalendarGrid
+                currentDate={currentDate}
+                data={marketData}
+                timeframe={timeframe}
+                metric={metric}
+                dataByDate={dailyKlines}
+                onCellClick={(data) => {
+                  if (isComparing && comparisonData) {
+                    setSelectedData(comparisonData);
+                    setIsComparing(false);
+                  } else {
+                    setSelectedData(data);
                   }
                 }}
-            >
-              <AnimatedCalendarWrapper keyProp={`${timeframe}-${currentDate.toISOString()}`}>
-                <CalendarGrid
-                  currentDate={currentDate}
-                  data={marketData}
-                  timeframe={timeframe}
-                  metric={metric}
-                  dataByDate={dailyKlines}
-                  // onCellClick={(data) => setSelectedData(data)}
-                  onCellClick={(data) => {
-                    if (comparisonData) {
-                      setSelectedData(comparisonData);
-                    } else {
-                      setSelectedData(data);
-                    }
-                  }}
-                  focusedDate={focusedDate}
-                  setFocusedDate={setFocusedDate}
-                  rangeStart={rangeStart}
-                  rangeEnd={rangeEnd}
-                  onRangeStart={handleRangeStart}
-                  onRangeExtend={handleRangeExtend}
-                  onRangeEnd={handleRangeEnd}
-                  patternDates={patternDates}
-                />
-              </AnimatedCalendarWrapper>
-            </Box>
-          </Fade>
+                focusedDate={focusedDate}
+                setFocusedDate={setFocusedDate}
+                rangeStart={rangeStart}
+                rangeEnd={rangeEnd}
+                onRangeStart={handleRangeStart}
+                onRangeExtend={handleRangeExtend}
+                onRangeEnd={handleRangeEnd}
+                patternDates={patternDates}
+              />
+            </AnimatedCalendarWrapper>
+          </Box>
+        </Fade>
       )}
-      {/* Detailed modal for day/week/month selection */}
       <DayDetailModal
         open={!!selectedData}
-        onClose={() => setSelectedData(null)}
+        onClose={() => {
+          setSelectedData(null);
+          setIsComparing(false);
+        }}
         data={selectedData}
         metric={metric}
         dailyKlines={dailyKlines}
         symbol={symbol}
         comparisonData={comparisonData}
-        clearComparison={() => setComparisonData(null)}
-        onRequestComparison={(data) => setComparisonData(data)}
+        clearComparison={() => {
+          setComparisonData(null);
+          setIsComparing(false);
+        }}
+        onRequestComparison={(data) => {
+          setComparisonData(data);
+          setIsComparing(true);
+        }}
       />
       <Snackbar
         open={!!alertData}
@@ -379,8 +353,6 @@ export default function CalendarView({ symbol, timeframe, metric }) {
             severity={
               alertData.type === 'volatility'
                 ? 'warning'
-                : alertData.type === 'performance'
-                ? 'error'
                 : 'error'
             }
             sx={{ width: '100%' }}

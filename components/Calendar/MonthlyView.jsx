@@ -45,7 +45,7 @@ export default function MonthlyView({
       <Box
         display="grid"
         gridTemplateColumns="repeat(7, 1fr)"
-        gap={1}
+        gap={1.5}
         sx={{ overflowX: "auto", minWidth: "600px" }}
       >
         {days.map((day) => {
@@ -95,17 +95,19 @@ export default function MonthlyView({
                 borderColor: isPatternDate ? '#f39c12' : undefined,
                 ...styles,
                 ...getAlertStyle?.({ info: item, alertSettings: DEFAULT_ALERTS }),
+                width: 150,
+                height: 118,
                 transition: 'all 0.2s ease-in-out',
               }}
             >
               <Box
                 sx={{
                   position: 'absolute',
-                  top: 4,
-                  left: 6,
-                  fontSize: '0.75rem',
+                  top: 6,
+                  left: 10,
+                  fontSize: '18px',
                   fontWeight: 'bold',
-                  color: muiTheme.palette.text.secondary,
+                  color: 'white',
                 }}
               >
                 {format(day, 'd')}

@@ -2,10 +2,18 @@
 
 // React
 import { format, startOfWeek, endOfWeek, isSameMonth, isSameWeek } from 'date-fns';
+
 // MUI
 import { Typography, IconButton, Box } from '@mui/material';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
+const arrowBtnStyles = {
+  border: '1px solid gainsboro',
+  background: 'white',
+  '& svg':{
+    fontSize: 30
+  }
+}
 
 export default function CalendarHeader({ currentDate, onPrev, onNext, timeframe }) {
   let label;
@@ -29,10 +37,10 @@ export default function CalendarHeader({ currentDate, onPrev, onNext, timeframe 
   }
 
   return (
-    <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
-      <IconButton aria-label="Previous period" onClick={onPrev}><ChevronLeft /></IconButton>
-      <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>{label}</Typography>
-      <IconButton aria-label="Next period" onClick={onNext}><ChevronRight /></IconButton>
+    <Box display="flex" alignItems="center" justifyContent="space-between" mb={4.5}>
+      <IconButton aria-label="Previous period" onClick={onPrev} sx={arrowBtnStyles}><ChevronLeft /></IconButton>
+      <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center', fontSize: 22, fontWeight: 600 }}>{label}</Typography>
+      <IconButton aria-label="Next period" onClick={onNext} sx={arrowBtnStyles}><ChevronRight /></IconButton>
     </Box>
   );
 }

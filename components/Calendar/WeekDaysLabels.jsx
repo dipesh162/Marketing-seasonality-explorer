@@ -17,9 +17,9 @@ export default function RenderDayHeaders() {
   const end = endOfWeek(new Date(), { weekStartsOn: 0 });
   const days = eachDayOfInterval({ start, end });
   return (
-    <Box display="grid" gridTemplateColumns="repeat(7, 1fr)" gap={1} mb={1}>
+    <Box display="grid" gridTemplateColumns="repeat(7, 1fr)" gap={1} mb={1} >
       {days.map((day) => (
-        <Typography key={day.toISOString()} variant="caption" textAlign="center" fontWeight="bold">
+        <Typography key={day.toISOString()} variant="caption" textAlign="center" fontSize={18} fontWeight="bold">
           {format(day, 'EEE')}
         </Typography>
       ))}

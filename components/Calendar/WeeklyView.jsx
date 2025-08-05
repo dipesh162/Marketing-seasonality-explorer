@@ -28,17 +28,18 @@ export default function WeeklyView({
             key={week.key}
             variant="caption"
             textAlign="center"
-            sx={{ flex: 1, fontWeight: "bold" }}
+            sx={{ flex: 1, fontWeight: "bold", fontSize: 18 }}
           >
             {week.key}
           </Typography>
         ))}
       </Box>
       <Box
-        display="grid"
-        gridTemplateColumns={`repeat(${weeks.length}, 1fr)`}
-        gap={1}
-        sx={{ overflowX: "auto", minWidth: "600px" }}
+        display="flex"
+        flexWrap='wrap'
+        // gridTemplateColumns={`repeat(${weeks.length}, 1fr)`}
+        gap={3.5}
+        sx={{ overflowX: "auto", minWidth: !isMobile ? "400px" : '', flexDirection: isMobile ? 'column' : 'row'}}
       >
         {weeks.map((week) => {
           const isPatternDate = patternDates?.has(week.key);
@@ -60,6 +61,7 @@ export default function WeeklyView({
             padding: isMobile ? 0.5 : 1,
             cursor: "pointer",
             border: "1px solid #ccc",
+            flex: !isMobile ? 1 : 'unset'
           };
 
           const normalizedVolume = maxVolume
@@ -89,17 +91,17 @@ export default function WeeklyView({
               <Box sx={styles} onClick={() => onCellClick({ ...week })}>
                 {/* Performance indicator */}
                 <Box display="flex" alignItems="center" gap={0.5}>
-                  <Typography variant="caption">
+                  <Typography variant="caption" fontSize={16} fontWeight={500}>
                     {week.avgPerformance.toFixed(2)}
                   </Typography>
                   {week.avgPerformance > 0 && (
-                    <Typography variant="caption" color="green">▲</Typography>
+                    <Typography variant="caption" fontSize={16} fontWeight={500} color="green">▲</Typography>
                   )}
                   {week.avgPerformance < 0 && (
-                    <Typography variant="caption" color="red">▼</Typography>
+                    <Typography variant="caption" fontSize={16} fontWeight={500} color="red">▼</Typography>
                   )}
                   {week.avgPerformance === 0 && (
-                    <Typography variant="caption" color="gray">–</Typography>
+                    <Typography variant="caption" fontSize={16} fontWeight={500} color="gray">–</Typography>
                   )}
                 </Box>
 

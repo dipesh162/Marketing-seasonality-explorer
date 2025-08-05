@@ -78,6 +78,9 @@ export default function FiltersPanel({ symbol, setSymbol, timeframe, setTimefram
         onChange={(e) =>
           setAlertSettings((prev) => ({ ...prev, volatility: parseFloat(e.target.value) || 0 }))
         }
+        sx={{
+          width: 180
+        }}
       />
       <TextField
         label="Alert: Performance <"
@@ -88,6 +91,9 @@ export default function FiltersPanel({ symbol, setSymbol, timeframe, setTimefram
         onChange={(e) =>
           setAlertSettings((prev) => ({ ...prev, performance: parseFloat(e.target.value) || 0 }))
         }
+        sx={{
+          width: 180
+        }}
       />
     </Box>
   );

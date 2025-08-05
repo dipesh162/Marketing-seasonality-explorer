@@ -26,6 +26,8 @@ const buttonStyle = {
   cursor: "pointer",
   fontSize: "0.9rem",
   textTransform: "unset",
+  fontSize: 16,
+  fontWeight: 500
 };
 
 const exportAsImage = (symbol, label) => {
@@ -161,6 +163,8 @@ export default function DayDetailModal({
       PaperProps={{
         sx: {
           maxWidth: 'fit-content', 
+          borderRadius: 1.5,
+          padding: '4px 18px'
         },
       }}
       id="export-content"
@@ -170,7 +174,7 @@ export default function DayDetailModal({
       </DialogTitle>
       <DialogContent dividers>
         <Box>
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="subtitle1" fontWeight={500} gutterBottom>
             Price Metrics:
           </Typography>
           <Box mb={2}>
@@ -182,7 +186,7 @@ export default function DayDetailModal({
 
           <Divider />
 
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="subtitle1" fontWeight={500} marginTop={1} gutterBottom>
             Volatility & Performance:
           </Typography>
           <Box mb={2}>
@@ -212,7 +216,7 @@ export default function DayDetailModal({
 
           <Divider />
 
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="subtitle1" fontWeight={500} marginTop={1} gutterBottom>
             Technical Indicators:
           </Typography>
           <Box mb={2}>
@@ -229,7 +233,7 @@ export default function DayDetailModal({
             justifyContent="flex-end"
           >
             {comparisonData ? (
-              <Button onClick={clearComparison}>Clear Comparison</Button>
+              <Button onClick={clearComparison} textTransform='capitalize'>Clear Comparison</Button>
             ) : (
               <Button
                 variant="primary"
